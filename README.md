@@ -3,6 +3,9 @@ AttenGait: when gait recognition meets attention and rich modalities
 
 Support code for paper accepted for publication at Pattern Recognition. Note that some code parts are derived from [OpenGait](https://github.com/ShiqiYu/OpenGait)
 
+[![https://doi.org/10.1016/j.patcog.2023.110171](https://img.shields.io/badge/doi-10.1016/j.patcog.2023.110171-blue)](https://doi.org/10.1016/j.patcog.2023.110171)
+[![https://www.researchgate.net/publication/376102358_AttenGait_Gait_recognition_with_attention_and_rich_modalities](https://img.shields.io/badge/%20-Read_on_ResearchGate-blue.svg?logo=researchgate&color=00CCBB&labelColor=555555)](https://www.researchgate.net/publication/376102358_AttenGait_Gait_recognition_with_attention_and_rich_modalities)
+
 ## Abstract
 Current gait recognition systems employ different types of manual attention mechanisms, like horizontal cropping of the input data to guide the training process and extract useful gait signatures for people identification. Typically, these techniques are applied using silhouettes as input, which limits the learning capabilities of the models. Thus, due to the limited information provided by silhouettes, state-of-the-art gait recognition approaches must use very simple and manually designed mechanisms, in contrast to approaches proposed for other topics such as action recognition. To tackle this problem, we propose AttenGait, a novel model for gait recognition equipped with trainable attention mechanisms that automatically discover interesting areas of the input data. AttenGait can be used with any kind of informative modalities, such as optical flow, obtaining state-of-the-art results thanks to the richer information contained in those modalities. We evaluate AttenGait on two public datasets for gait recognition: CASIA-B and GREW; improving the previous state-of-the-art results on them, obtaining 95.8% and 70.7% average accuracy, respectively.
 
