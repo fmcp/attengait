@@ -58,5 +58,22 @@ python mains/train.py --datadir=OUTPATH/GREW_of_dataset/ --experdir=EXPERPATH --
 python mains/test_grew_challenge.py --datadir=OUTPATH/GREW_of_dataset/ --knn 1 --nclasses 6000 --model EXPERPATH/EXPERFOLDER/model-final.hdf5 --bs 1 --cross_weight=1.0 --split_crossentropy --softmax_attention --combined_output_length=32
 ```
 
+### OUMVLP-OF
+#### 0. Data preparation
+Download the OUMVLP-OF dataset from [http://www.am.sanken.osaka-u.ac.jp/BiometricDB/GaitLPOF.html](http://www.am.sanken.osaka-u.ac.jp/BiometricDB/GaitLPOF.html) and extract the files. Then, run the following code to prepare the data:
+```python
+python preprocessing/generate_of_dataset_oumvlp_test.py --ofdir OUTPATH/OUMVLP_of/ --outdir OUTPATH/OUMVLP_of_dataset/
+python preprocessing/generate_of_dataset_oumvlp_test.py --ofdir OUTPATH/OUMVLP_of/ --outdir OUTPATH/OUMVLP_of_dataset/ --mode ft
+python preprocessing/generate_of_dataset_oumvlp_test.py --ofdir OUTPATH/OUMVLP_of/ --outdir OUTPATH/OUMVLP_of_dataset/ --mode test
+```
+#### 1. Training
+```python
+python mains/train.py --datadir=OUTPATH/OUMVLP_of_dataset/ --experdir=EXPERPATH --nclasses=5153 --epochs=2000 --extraepochs=1000 --pk --p 4 --k 4 --lr=0.00025 --attention_drop_rate=0.1 --softmax_attention --kernel_regularizer --prefix=attengait_oumvlp_of --lr_sched --cross_weight=1.0 --split_crossentropy --combined_output_length=32 --model_size=large --multi_gpu=8
+```
+
+#### 2. Testing
+```python
+python mains/test.py --datadir=OUTPATH/OUMVLP_of_dataset/ --knn 1 --nclasses 5154 --allcameras --model EXPERPATH/EXPERFOLDER/model-final.hdf5 --bs 1 --cross_weight=1.0 --split_crossentropy --softmax_attention --combined_output_length=32 --model_size=large
+```
 ## References
 Francisco M Castro, Rubén Delgado-Escaño, Ruber Hernández-García, Manuel J Marín-Jiménez, Nicolás Guil. _"AttenGait: Gait recognition with attention and rich modalities"_. Pattern Recognition, 2024
