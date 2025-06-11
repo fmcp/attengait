@@ -112,6 +112,46 @@ def encode_test(model, datadir, nclasses=50, batchsize=128,
 			all_vids_probe = exper["vids"]
 			all_cams_probe = exper["cams"]
 			all_gaits_probe = exper["gaits"]
+	elif nclasses == 5154:
+		cameras = [0, 15, 30, 45, 60, 75, 90, 180, 195, 210, 225, 240, 255, 270]
+		data_folder_probe = osp.join(datadir, 'tfimdb_oumvlp_N5154_test_of30_64x64')
+		info_file_probe = osp.join(datadir, 'tfimdb_oumvlp_N5154_test_of30_64x64.h5')
+		dataset_info_probe = dd.io.load(info_file_probe)
+
+		testdir = os.path.join(experdir, "results")
+		os.makedirs(testdir, exist_ok=True)
+		outpath = os.path.join(testdir, "probe_{:03}_{:02}_knn.h5".format(nclasses, nframes))
+
+		if not os.path.exists(outpath):
+			probe_generator = DataGeneratorGait(dataset_info_probe, batch_size=batchsize, mode='test',
+												  labmap=None, camera=cameras,
+												  datadir=data_folder_probe, augmentation=False, max_frames=nframes,
+												  cut=cut)
+			all_feats_probe, all_gt_labs_probe, all_vids_probe, all_cams_probe, all_gaits_probe = encodeData(probe_generator, model)
+
+			all_feats_probe = np.concatenate(np.expand_dims(all_feats_probe, 1), axis=0)
+			all_gt_labs_probe = np.asarray(np.concatenate(all_gt_labs_probe))
+			all_vids_probe = np.asarray(np.concatenate(all_vids_probe))
+			all_cams_probe = np.asarray(np.concatenate(all_cams_probe))
+			all_gaits_probe = np.asarray(np.concatenate(all_gaits_probe))
+
+			# Save CM
+			exper = {}
+			exper["feats"] = all_feats_probe
+			exper["gtlabs"] = all_gt_labs_probe
+			exper["vids"] = all_vids_probe
+			exper["cams"] = all_cams_probe
+			exper["gaits"] = all_gaits_probe
+			print("Saving data:")
+			dd.io.save(outpath, exper)
+			print("Data saved to: " + outpath)
+		else:
+			exper = dd.io.load(outpath)
+			all_feats_probe = exper["feats"]
+			all_gt_labs_probe = exper["gtlabs"]
+			all_vids_probe = exper["vids"]
+			all_cams_probe = exper["cams"]
+			all_gaits_probe = exper["gaits"]
 	else:
 		sys.exit(0)
 
@@ -125,6 +165,45 @@ def encode_gallery(model, datadir, nclasses=50, batchsize=128, nframes=None, cut
 		cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
 		data_folder_gallery = osp.join(datadir, 'tfimdb_casiab_N050_ft_of30_64x64')
 		info_file_gallery = osp.join(datadir, 'tfimdb_casiab_N050_ft_of30_64x64.h5')
+		dataset_info_gallery = dd.io.load(info_file_gallery)
+
+		testdir = os.path.join(experdir, "results")
+		os.makedirs(testdir, exist_ok=True)
+		outpath = os.path.join(testdir, "gallery_{:03}_{:02}_knn.h5".format(nclasses, nframes))
+
+		if not os.path.exists(outpath):
+			gallery_generator = DataGeneratorGait(dataset_info_gallery, batch_size=batchsize, mode='trainval',
+			                                      labmap=None, camera=cameras,
+			                                      datadir=data_folder_gallery, augmentation=False, max_frames=nframes,cut=cut)
+			all_feats_gallery, all_gt_labs_gallery, all_vids_gallery, all_cams_gallery, all_gaits_gallery = encodeData(gallery_generator, model)
+
+			all_feats_gallery = np.concatenate(np.expand_dims(all_feats_gallery, 1), axis=0)
+			all_gt_labs_gallery = np.asarray(np.concatenate(all_gt_labs_gallery))
+			all_vids_gallery = np.asarray(np.concatenate(all_vids_gallery))
+			all_cams_gallery = np.asarray(np.concatenate(all_cams_gallery))
+			all_gaits_gallery = np.asarray(np.concatenate(all_gaits_gallery))
+
+			# Save CM
+			exper = {}
+			exper["feats"] = all_feats_gallery
+			exper["gtlabs"] = all_gt_labs_gallery
+			exper["vids"] = all_vids_gallery
+			exper["cams"] = all_cams_gallery
+			exper["gaits"] = all_gaits_gallery
+			print("Saving data:")
+			dd.io.save(outpath, exper)
+			print("Data saved to: " + outpath)
+		else:
+			exper = dd.io.load(outpath)
+			all_feats_gallery = exper["feats"]
+			all_gt_labs_gallery = exper["gtlabs"]
+			all_vids_gallery = exper["vids"]
+			all_cams_gallery = exper["cams"]
+			all_gaits_gallery = exper["gaits"]
+	elif nclasses == 5154:
+		cameras = [0, 15, 30, 45, 60, 75, 90, 180, 195, 210, 225, 240, 255, 270]
+		data_folder_gallery = osp.join(datadir, 'tfimdb_oumvlp_N5154_ft_of30_64x64')
+		info_file_gallery = osp.join(datadir, 'tfimdb_oumvlp_N5154_ft_of30_64x64.h5')
 		dataset_info_gallery = dd.io.load(info_file_gallery)
 
 		testdir = os.path.join(experdir, "results")
@@ -237,13 +316,22 @@ if __name__ == "__main__":
 
 	# Call the evaluator
 	if allcameras:
-		test_cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
-		gallery_cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
-		conds = 3
+		if nclasses < 999:
+			test_cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
+			gallery_cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
+			conds = 3
+		else:
+			test_cameras = [0, 15, 30, 45, 60, 75, 90, 180, 195, 210, 225, 240, 255, 270]
+			gallery_cameras = [0, 15, 30, 45, 60, 75, 90, 180, 195, 210, 225, 240, 255, 270]
+			conds = 1
 	else:
 		test_cameras = [camera]
-		gallery_cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
-		conds = 3
+		if nclasses < 999:
+			gallery_cameras = [0, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180]
+			conds = 3
+		else:
+			gallery_cameras = [0, 15, 30, 45, 60, 75, 90, 180, 195, 210, 225, 240, 255, 270]
+			conds = 1
 
 	# ---------------------------------------
 	# Load model

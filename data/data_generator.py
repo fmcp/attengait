@@ -369,10 +369,10 @@ class DataGeneratorGait:
 	def augment_data(self):
 		@tf.function
 		def augment_data_fun(samples, labels, videoId=None, camera=None):
-			if self.nclasses == 74:
-				labels_one_hot = tf.one_hot(labels, self.nclasses)
-			elif self.nclasses == 50:
+			if self.nclasses == 50:
 				labels_one_hot = tf.one_hot(labels - 74, self.nclasses)
+			elif self.nclasses == 5154:
+				labels_one_hot = tf.one_hot(labels - 5153, self.nclasses)
 			else:
 				labels_one_hot = tf.one_hot(labels, self.nclasses)
 

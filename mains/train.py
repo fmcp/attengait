@@ -195,6 +195,12 @@ def trainGaitNet(datadir="matimdbtum_gaid_N150_of25_60x60_lite", experfix="of", 
 	elif nclasses == 50:
 		data_folder = osp.join(datadir, 'tfimdb_casiab_N050_ft_of30_64x64')
 		info_file = osp.join(datadir, 'tfimdb_casiab_N050_ft_of30_64x64.h5')
+	elif nclasses == 5153:
+		data_folder = osp.join(datadir, 'tfimdb_oumvlp_N5153_train_of30_64x64')
+		info_file = osp.join(datadir, 'tfimdb_oumvlp_N5153_train_of30_64x64.h5')
+	elif nclasses == 5154:
+		data_folder = osp.join(datadir, 'tfimdb_oumvlp_N5154_ft_of30_64x64')
+		info_file = osp.join(datadir, 'tfimdb_oumvlp_N5154_ft_of30_64x64.h5')
 	elif nclasses == 20000:
 		data_folder = osp.join(datadir, 'tfimdb_grew_N20000_train_of30_64x64')
 		info_file = osp.join(datadir, 'tfimdb_grew_N20000_train_of30_64x64.h5')
